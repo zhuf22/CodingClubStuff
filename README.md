@@ -1,2 +1,3 @@
 # CodingClubStuff
-Coding Club Stuff
+
+Repository for code pertaining to coding club.
