@@ -1,0 +1,25 @@
+For the solution, the basis is being able to take input through a BufferedReader with the following syntax
+
+BufferedReader bf = new BufferedReader(new FileReader("file.txt")), where "file.txt" is the file you are reading input from
+
+The first part of the problem asks us to take input of a list of numbers and for each number, we divide the number by 3, add 2, and then take that result and sum 
+it to a separate variable
+
+Ex. [12,6,4] -> [2,0,-1] -> 2 + 0 + -1 = 1
+
+We can implement this by taking input into an array( int[] array = new int[size], where size is some value ), and apply the operations to it using a for loop
+(for(int i = 0; i < N; i++))
+
+This will give us an answer in relatively little time.
+
+For part 2, we are asked to not just apply the operation of dividing by 3, subtracting by 2 just once, but multiple times (until the value becomes < 0)
+
+We do this using something called a while loop, which functionally works by doing:
+
+while(condition){
+  run something in here
+}
+
+and while the condition is true, the while loop will run. For us, the condition is if the value is less than 0. 
+
+Combining this, and the previous for loop over the data, will give us the answer as well.
