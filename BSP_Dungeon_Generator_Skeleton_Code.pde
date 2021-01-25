@@ -111,6 +111,9 @@ public ArrayList<BSP_Node> split_space_vertically(float top_x, float top_y, floa
 //the parameter of LIMIT_ITERATIONS, which is just a limit to the number of times your loop should run before it terminates.
 //make sure to be able to have a way to be able to randomly select if you want to cut horizontally or vertically in your BSP Tree
 //also make sure to not allow for degenerate regions (i.e. we will set a limit on the minimum length of some region's width or length using EP_X and EP_Y)
+//implementation of this requires knowledge of BFS traversal, if I didn't have time to explain it fully or didnt explain it well, here are some supplementary sources:
+// 1. https://cp-algorithms.com/graph/breadth-first-search.html
+
 public void augment_dungeon(float LIMIT_ITERATIONS){
   float CUR_ITERATIONS = 0;
   BSP_Node root = new BSP_Node(10.0, 10.0, 700.0, 700.0);
