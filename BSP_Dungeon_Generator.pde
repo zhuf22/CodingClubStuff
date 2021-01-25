@@ -1,6 +1,8 @@
 import java.util.*;
 import java.util.*;
 
+//NOTE THAT THIS IS THE ACTUAL CODE FOR THE BSP TREE MAPGEN, SKELETON CODE IS PROVIDED IN A SEPARATE FILE
+
 //RELEVANT LINKS:
 //http://www.roguebasin.com/index.php?title=Articles#Combat_2
 //https://www.redblobgames.com/
