@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.*;
 
 //RELEVANT LINKS:
 //http://www.roguebasin.com/index.php?title=Articles#Combat_2
@@ -17,12 +18,19 @@ ArrayList<BSP_Node> DUNGEON_CONSTRUCTION_ORDER; //this will store the BSP_Nodes 
 ArrayList<BSP_Pair> MAP_CONNECTIONS; //this will store the pair of BSP_Nodes which indicate a connection between two regions (i.e. some player can move between them)
 color[] region_colors; //colors mutually reachable locations with the same color, that can be chosen by the programmer
 
+//BSP_Pair is used for connecting two BSP_Nodes to create sort of like bridges between different regions
 class BSP_Pair{
   BSP_Node one;
   BSP_Node two;
   public BSP_Pair(BSP_Node one, BSP_Node two){
     this.one=one;
     this.two=two;
+  }
+  public BSP_Node getOne(){
+    return one;
+  }
+  public BSP_Node getTwo(){
+    return two;
   }
 }
 
@@ -58,12 +66,6 @@ class BSP_Node{
       ret.add(cur);
       return ret;
     }
-    if(cur.left != null){
-      println("LEFT: " + cur.left.bottom_x + " " + cur.left.bottom_y + " " + cur.left.top_x + " " + cur.left.top_y);
-    }
-    if(cur.right != null){
-      println("RIGHT: " + cur.right.bottom_x + " " + cur.right.bottom_y + " " + cur.right.top_x + " " + cur.right.top_y);
-    }
     ArrayList<BSP_Node> one = traverse(cur.left);
     ArrayList<BSP_Node> two = traverse(cur.right);
     ArrayList<BSP_Node> net = new ArrayList<BSP_Node>();
@@ -76,6 +78,7 @@ class BSP_Node{
     return net;
   }
 }
+
 
 
 //these are the two main methods that you will use to split your space:
@@ -98,6 +101,8 @@ public ArrayList<BSP_Node> split_space_vertically(float top_x, float top_y, floa
     ret.add(new BSP_Node(DIV_X,bottom_y,top_x,top_y));
     return ret;
 }
+
+//this method is given to you: basically takes in an arraylist of bsp_nodes and a target bsp_node and sees if it exists in it.
 public boolean is_in(ArrayList<BSP_Node> vis, BSP_Node target){
   for(BSP_Node b : vis){
     if(b.top_x==target.top_x && b.top_y==target.top_y && b.bottom_x==target.bottom_x && b.bottom_y==target.bottom_y){
@@ -115,6 +120,8 @@ public boolean is_in(ArrayList<BSP_Node> vis, BSP_Node target){
 //make sure to be able to have a way to be able to randomly select if you want to cut horizontally or vertically in your BSP Tree
 
 //Building the BSP tree requires knowledge of BFS traversal
+
+//TODO: make sure to not allow for degenerate regions (i.e. set a limit on the minimum length of its width or length
 public BSP_Node augment_dungeon(float LIMIT_ITERATIONS){
   float CUR_ITERATIONS = 0;
   BSP_Node root = new BSP_Node(10.0, 10.0, 600.0, 600.0);
@@ -134,7 +141,7 @@ public BSP_Node augment_dungeon(float LIMIT_ITERATIONS){
     //println(select);
     if(select==1){
       float ran_div = (int)(random(2,5));
-      float split_point = (root_one.top_y + root_one.bottom_y)/2;
+      float split_point = (root_one.top_y + root_one.bottom_y)/(2.4);
       //println("SPLIT PARAM HORIZ: " + root_one.top_x + " " + root_one.bottom_x);
       ArrayList<BSP_Node> one = split_space_horizontally(root_one.top_x,root_one.top_y,root_one.bottom_x,root_one.bottom_y,split_point);
       println("PARENT: "  + ": "  + root_one.bottom_x + " " + root_one.bottom_y + " " + root_one.top_x + " " + root_one.top_y);
@@ -152,7 +159,7 @@ public BSP_Node augment_dungeon(float LIMIT_ITERATIONS){
       //seen.add(one.get(1));
     } else if(select==2){
       float ran_div = (int)(random(2,5));
-      float split_point = (root_one.top_x + root_one.bottom_x)/3;
+      float split_point = (root_one.top_x + root_one.bottom_x)/(2.4);
       //println("SPLIT PARAM VERT: " + root_one.top_y + " " + root_one.bottom_y);
       ArrayList<BSP_Node> two = split_space_vertically(root_one.top_x,root_one.top_y,root_one.bottom_x,root_one.bottom_y,split_point);
        println("PARENT: "  + ": "  + root_one.bottom_x + " " + root_one.bottom_y + " " + root_one.top_x + " " + root_one.top_y);
@@ -169,22 +176,42 @@ public BSP_Node augment_dungeon(float LIMIT_ITERATIONS){
     }
   }
   DUNGEON_CONSTRUCTION_ORDER = root.traverse(root);
+  create_map_connections(root);
   return root;
 }
 
 
-//this methods assumes that DUNGEON_CONSTRUCTION_ORDER is already initialized and not null.
+
 //the goal of this method is to create map connections between two nodes if they are adjacent regions and if we decide to connect them(use random() to determine if they should be connected)
 //tiny hint: two regions are directly adjacent to each other if they both share the same parent in the BSP Tree, this should make implementation a lot easier.
-
-public void create_map_connections(){
-}
+//anoter hint: you will also have to traverse the tree, 
+public void create_map_connections(BSP_Node cur){
+    if(cur==null){
+      return;
+    }
+    if(cur.left != null){
+      println("LEFT: " + cur.left.bottom_x + " " + cur.left.bottom_y + " " + cur.left.top_x + " " + cur.left.top_y);
+    }
+    if(cur.right != null){
+      println("RIGHT: " + cur.right.bottom_x + " " + cur.right.bottom_y + " " + cur.right.top_x + " " + cur.right.top_y);
+    }
+    int rand = 1;
+    if(cur.left != null && cur.right != null){
+      boolean one = (cur.left).left == null && (cur.left).right == null;
+      boolean two = (cur.right).left == null && (cur.right).right == null;
+      if(rand == 1 && one && two){
+        MAP_CONNECTIONS.add(new BSP_Pair(cur.left,cur.right));
+      }
+    }
+    create_map_connections(cur.left);
+    create_map_connections(cur.right);
+ }
 
 void setup(){
     size(700,700);
     DUNGEON_CONSTRUCTION_ORDER = new ArrayList<BSP_Node>();
     MAP_CONNECTIONS = new ArrayList<BSP_Pair>();
-    BSP_Node ret = augment_dungeon(25);
+    BSP_Node ret = augment_dungeon(10);
     region_colors = new color[DUNGEON_CONSTRUCTION_ORDER.size()];
     int idx = 0;
     for(BSP_Node b : DUNGEON_CONSTRUCTION_ORDER){
@@ -194,13 +221,27 @@ void setup(){
 }
 
 void draw(){
-   background(255);
+   background(0);
    int idx = 0;
+   stroke(0);
    for(BSP_Node b : DUNGEON_CONSTRUCTION_ORDER){
      //fill(region_colors[idx++]);
      rect(b.bottom_x,b.bottom_y,b.top_x-b.bottom_x,b.top_y-b.bottom_y);
      //delay(10);
    }
-   println("SIZE: " + DUNGEON_CONSTRUCTION_ORDER.size());
+   
+   for(BSP_Pair pr : MAP_CONNECTIONS){
+     BSP_Node one = pr.getOne();
+     BSP_Node two = pr.getTwo();
+     float avg_one_x = (one.top_x + one.bottom_x)/2;
+     float avg_one_y = (one.top_y + one.bottom_y)/2;
+     float avg_two_x = (two.top_x + two.bottom_x)/2;
+     float avg_two_y = (two.top_y + two.bottom_y)/2;
+     stroke(color(255,125,0));
+     line(avg_one_x,avg_one_y,avg_two_x,avg_two_y);
+   }
+   
+   //println("SIZE: " + DUNGEON_CONSTRUCTION_ORDER.size());
+   //println("NUMBER OF BRIDGES: " + MAP_CONNECTIONS.size());
    
 }
