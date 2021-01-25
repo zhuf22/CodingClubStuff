@@ -103,6 +103,10 @@ public ArrayList<BSP_Node> split_space_vertically(float top_x, float top_y, floa
     //write code here
     return ret;
 }
+//augment_dungeon() is objectively the hardest part of this, since it is where you actually build your BSP tree. For the time being, the augment_dungeon() function takes
+//the parameter of LIMIT_ITERATIONS, which is just a limit to the number of times your loop should run before it terminates.
+//make sure to be able to have a way to be able to randomly select if you want to cut horizontally or vertically in your BSP Tree
+//also make sure to not allow for degenerate regions (i.e. we will set a limit on the minimum length of some region's width or length using EP_X and EP_Y)
 public void augment_dungeon(float LIMIT_ITERATIONS){
   float CUR_ITERATIONS = 0;
   BSP_Node root = new BSP_Node(10.0, 10.0, 700.0, 700.0);
@@ -117,7 +121,7 @@ public void augment_dungeon(float LIMIT_ITERATIONS){
     //write code here
   }
   
-  
+  //call your created methods here on the root of your BSP Tree
   DUNGEON_CONSTRUCTION_ORDER = root.traverse(root);
   create_map_connections(root);
 }
