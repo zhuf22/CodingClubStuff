@@ -4,12 +4,16 @@ import java.util.*;
 //http://www.roguebasin.com/index.php?title=Articles#Combat_2
 //https://www.redblobgames.com/
 
+//BACKGROUND INFORMATION:
 //Implementing a BSP Tree for Map Gen: http://www.roguebasin.com/index.php?title=Basic_BSP_Dungeon_generation
 
 //BSP(or Binary Space Partitioning) Tree, is a structure which allows you to divide regions up and consider them as nodes in a binary tree, 
 //where a node is considered to be a child of another node if its space is enclosed within its parent's space. The link above provides a nice summary of it for our purposes.
 
+//Besides for procedural mapgen, BSP Tree is also useful in game dev for efficiently rendering an area, as the ordering of nodes in the BSP Tree from leaf to root
+//gives an ordering for how different regions of an area should be rendered.
 
+//PERTINENT INFORMATION:
 //the BSP_Node class has 6 fields, (top_x,top_y), which is the top right corner of some rectangle, (bottom_x,bottom_y), which is the bottom left corner of some rectangle,
 //and left and right, which act as pointers to other BSP_Node objects for building your BSP tree.
 
