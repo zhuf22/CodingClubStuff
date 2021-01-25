@@ -187,6 +187,8 @@ void draw(){
 //namely: consider implementing it such that you aren't just connecting regions that are leaf nodes, but connecting ANY two nodes in the BSP Tree which share the same parent
 //also, consider for augment_dungeon() to do it so that you arent stopping based on number of iterations, but rather by depth in your BSP Tree.
 
+//also, think about the pro's and con's of BSP tree for mapgen (it is not the only way to generate maps procedurally, the RogueBasin site provides a number of ideas).
+
 //this is not necessary in order to get a decent map for game dev, but it is good to think about and is a fun implementation
 
 
