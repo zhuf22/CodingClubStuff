@@ -15,7 +15,7 @@ import java.util.*;
 
 ArrayList<BSP_Node> DUNGEON_CONSTRUCTION_ORDER; //this will store the BSP_Nodes which represent our map
 ArrayList<BSP_Pair> MAP_CONNECTIONS; //this will store the pair of BSP_Nodes which indicate a connection between two regions (i.e. some player can move between them)
-color[] region_colors; //colors mutually reachable locations with the same color, that can be chosen by the programmer
+color[] region_colors; //colors for different stuff, unnecessary but can be added in if desired
 
 //BSP_Pair is used for connecting two BSP_Nodes to create sort of like bridges between different regions
 class BSP_Pair{
