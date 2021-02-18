@@ -1,6 +1,9 @@
 import java.util.*;
 import java.io.*;
 
+//quick summary: we use a recursive method solve() which returns an integer representing the number of boards with 8 queens that can exist
+//note that this is a severe overcounting because the problem doesn't care for ordering, therefore we must divide by 8! (or 40320)
+//generally speaking, if there are n queens, we would divide by n!
 
 class Pair{
 	int x, y;
