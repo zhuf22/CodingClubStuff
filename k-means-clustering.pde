@@ -74,28 +74,9 @@ ArrayList<Point> recompute(){
   return newk_means;
 }
 
+//TODO: this function should implement code to assign our unassigned points to some known centroids. We use recompute() to update the positions of our centroids.
 void assign_points_to_centroids(){
-      for(int i = 0; i < datapoints.size(); i++){
-      Point belong = new Point(0,0);
-      double dst = 100000000;
-      for(int j = 0; j < k_means.size(); j++){
-          dst = min( (float)(dst), dist(k_means.get(j).x, k_means.get(j).y, datapoints.get(i).x, datapoints.get(i).y));
-          if(dst==  dist(k_means.get(j).x, k_means.get(j).y, datapoints.get(i).x, datapoints.get(i).y)){
-            belong=k_means.get(j);
-          }
-      }
-      if(belong_to_point.get(belong) != null){
-        ArrayList<Point> cont = belong_to_point.get(belong);
-        cont.add(datapoints.get(i));
-        belong_to_point.put(belong, cont);
-      } else {
-        ArrayList<Point> new_arr = new ArrayList<Point>();
-        new_arr.add(datapoints.get(i));
-        belong_to_point.put(belong,new_arr);
-      }
-      fill(belong.label);
-      circle(datapoints.get(i).x, datapoints.get(i).y, 10);
-   }
+    
 }
 
 void draw(){
