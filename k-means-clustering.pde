@@ -1,6 +1,6 @@
 
 
-//K-means clustering algorithm code
+//K-means (and potentially K-medians) clustering algorithm code
 
 //THE IMPORTANT STRUCTURES WE NEED:
 
@@ -68,12 +68,36 @@ void setup(){
 }
 
 
-//TODO: recompte() is a function which updates the position of the centroid based on the points in its cluster (using the mean, since this is k-means-clustering)
-//i.e. it returns a new ArrayList<Point> representing the new positions of the centroids, and updates k_means with it
+//TODO: recompute() is a function which updates the position of the centroid based on the points in its cluster (using the mean, since this is k-means-clustering)
+//i.e. it returns a new ArrayList<Point> representing the new positions of the centroids
 ArrayList<Point> recompute(){
   ArrayList<Point> newk_means = new ArrayList<Point>();
   //write code here
   return newk_means;
+}
+
+void assign_points_to_centroids(){
+      for(int i = 0; i < datapoints.size(); i++){
+      Point belong = new Point(0,0);
+      double dst = 100000000;
+      for(int j = 0; j < k_means.size(); j++){
+          dst = min( (float)(dst), dist(k_means.get(j).x, k_means.get(j).y, datapoints.get(i).x, datapoints.get(i).y));
+          if(dst==  dist(k_means.get(j).x, k_means.get(j).y, datapoints.get(i).x, datapoints.get(i).y)){
+            belong=k_means.get(j);
+          }
+      }
+      if(belong_to_point.get(belong) != null){
+        ArrayList<Point> cont = belong_to_point.get(belong);
+        cont.add(datapoints.get(i));
+        belong_to_point.put(belong, cont);
+      } else {
+        ArrayList<Point> new_arr = new ArrayList<Point>();
+        new_arr.add(datapoints.get(i));
+        belong_to_point.put(belong,new_arr);
+      }
+      fill(belong.label);
+      circle(datapoints.get(i).x, datapoints.get(i).y, 10);
+   }
 }
 
 void draw(){
@@ -94,7 +118,7 @@ void draw(){
   }
   
   
-  k_means=recompute();
+  k_means=recompute(); //k_means should be updated with the return value of recompute() here
  }
 
 
