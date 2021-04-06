@@ -8,14 +8,12 @@
 //k_means stores the possible centroids
 //NUM_DATA_POINTS gives the number of unlabeled points, and NUM_K_MEANS is the number of centroids
 //belong_to_point stores the unlabeled points that we associate with some centroid
-//arr lets us assign random colors to different centroids
 
 ArrayList<Point> datapoints = new ArrayList<Point>();
 ArrayList<Point> k_means = new ArrayList<Point>();
 HashMap<Point, ArrayList<Point> > belong_to_point = new HashMap<Point, ArrayList<Point> >();
 static int NUM_DATA_POINTS = 10000;
 static int NUM_K_MEANS = 8;
-color[] arr = new color[NUM_K_MEANS];
 //draw convex hull around each cluster(?)
 boolean initiate = false;
 
