@@ -104,7 +104,7 @@ void assign_points_to_centroids(){
        //belong_to_point.put(p,cluster);
        //(we technically don't need this line above because by updating cluster,
        //we update belong_to_point.get(p), because both cluster and belong_to_point.get(p) point to the same thing in memory 
-       (this is a feature in java and is tied to an idea referred to as the pointer machine model of computation)
+       //(this is a feature in java and is tied to an idea referred to as the pointer machine model of computation)
        
      } else {
        ArrayList<Point> new_cluster = new ArrayList<Point>();
