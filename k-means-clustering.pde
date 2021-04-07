@@ -8,12 +8,13 @@
 //k_means stores the possible centroids
 //NUM_DATA_POINTS gives the number of unlabeled points, and NUM_K_MEANS is the number of centroids
 //belong_to_point stores the unlabeled points that we associate with some centroid
+//arr lets us assign random colors to different centroids
 
 ArrayList<Point> datapoints = new ArrayList<Point>();
 ArrayList<Point> k_means = new ArrayList<Point>();
 HashMap<Point, ArrayList<Point> > belong_to_point = new HashMap<Point, ArrayList<Point> >();
-static int NUM_DATA_POINTS = 10000;
-static int NUM_K_MEANS = 8;
+static int NUM_DATA_POINTS = 9999;
+static int NUM_K_MEANS = 40;
 //draw convex hull around each cluster(?)
 boolean initiate = false;
 
@@ -70,13 +71,58 @@ void setup(){
 //i.e. it returns a new ArrayList<Point> representing the new positions of the centroids
 ArrayList<Point> recompute(){
   ArrayList<Point> newk_means = new ArrayList<Point>();
-  //write code here
+  for(int i = 0; i < k_means.size(); i++){
+    ArrayList<Point> cur_cluster = belong_to_point.get(k_means.get(i));
+    float avg_x = 0.0, avg_y = 0.0;
+    for(int j = 0; j < cur_cluster.size(); j++){
+        avg_x += (cur_cluster.get(j).getX());
+        avg_y += (cur_cluster.get(j).getY());
+    }
+    avg_x /= (float)(cur_cluster.size());
+    avg_y /= (float)(cur_cluster.size());
+    newk_means.add(new Point(avg_x, avg_y, k_means.get(i).getLabel()));
+  }
+  
   return newk_means;
 }
 
-//TODO: this function should implement code to assign our unassigned points to some known centroids. We use recompute() to update the positions of our centroids.
+//TODO: this function should implement code to assign our unassigned points to some known centroids.
 void assign_points_to_centroids(){
-    
+   for(int i = 0; i < datapoints.size(); i++){
+     Point p = new Point(0,0);
+     float MIN_VALUE = 1000000007;
+     for(int j = 0; j < k_means.size(); j++){
+       if(dist(k_means.get(j).getX(), k_means.get(j).getY(), datapoints.get(i).getX(), datapoints.get(i).getY()) < MIN_VALUE){
+         MIN_VALUE = dist(k_means.get(j).getX(), k_means.get(j).getY(), datapoints.get(i).getX(), datapoints.get(i).getY());
+         p = k_means.get(j);
+       }
+     }
+     println("GIVE POINT : " + p.getX() + " " + p.getY());
+     if(belong_to_point.containsKey(p)){
+       ArrayList<Point> cluster = belong_to_point.get(p);
+       cluster.add(datapoints.get(i));
+       //belong_to_point.put(p,cluster);
+       //(we technically don't need this line above because by updating cluster,
+       //we update belong_to_point.get(p), because both cluster and belong_to_point.get(p) point to the same thing in memory 
+       (this is a feature in java and is tied to an idea referred to as the pointer machine model of computation)
+       
+     } else {
+       ArrayList<Point> new_cluster = new ArrayList<Point>();
+       new_cluster.add(datapoints.get(i));
+       belong_to_point.put(p,new_cluster);
+     }
+   }
+}
+
+void visualize(){
+   for(int i = 0; i < k_means.size(); i++){
+     color c = k_means.get(i).getLabel();
+     ArrayList<Point> p =belong_to_point.get(k_means.get(i));
+     for(int j = 0; j < p.size(); j++){
+       fill(c);
+       circle(p.get(j).getX(), p.get(j).getY(), 10);
+     }
+   }
 }
 
 void draw(){
@@ -87,20 +133,17 @@ void draw(){
     //to store the unlabeled points associated with a centroid.
     //WRITE CODE BENEATH HERE: 
     
-    
-    
-    ///
+    assign_points_to_centroids();
+    visualize();
+    k_means=recompute(); //k_means should be updated with the return value of recompute() here
+    for(int i = 0; i < k_means.size(); i++){
+      fill(k_means.get(i).label);
+      circle(k_means.get(i).x, k_means.get(i).y, 10);
+    }
   }
-  for(int i = 0; i < k_means.size(); i++){
-    fill(k_means.get(i).label);
-    circle(k_means.get(i).x, k_means.get(i).y, 10);
-  }
-  
-  
-  k_means=recompute(); //k_means should be updated with the return value of recompute() here
  }
-
-
+ 
+ 
 class Point{
     public float x, y;
     public color label;
@@ -113,4 +156,14 @@ class Point{
       this.y=y;
       this.label=label;
     }
+    public float getX(){
+      return x;
+    }
+    public float getY(){
+      return y;
+    }
+    public color getLabel(){
+      return label;
+    }
 }
+
