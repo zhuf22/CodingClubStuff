@@ -91,17 +91,7 @@ public void GENERATE_CUSTOM_ARM(int LENGTH){
    float len = 60;
    for(int i = 0; i < LENGTH; i++){
      //WRITE CODE HERE
-     /*
-      float n_ang = random(0,2*PI);
-      PVector nxt = new PVector(cur.x + (len * cos(n_ang)), cur.y + (len*sin(n_ang)) );
-      println(cur.x + " " + cur.y + " " + nxt.x + " " + nxt.y);
-      float dx = nxt.x - cur.x;
-      float dy = nxt.y-cur.y;
-      robotArm.add(new ArmSegment(init, nxt) );
-      arm_lengths.add(sqrt( dx*dx + dy*dy) );
-      angles.add(atan( (float)(nxt.y - init.y)/(float)(nxt.x - init.x) ) );
-      init = nxt;
-      */
+    
     }
 }
 
