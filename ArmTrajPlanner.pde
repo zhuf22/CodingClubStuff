@@ -2,6 +2,10 @@ import java.io.*;
 import java.util.*;
 import java.nio.*;
 /*
+
+The basic question of this project is: given some linkage of arms, how can we manipulate it to do what we want? (In this case,
+what we want is for it to reach some point in space). The answer is two-fold: Forward Kinematics and Inverse Kinematics.
+
 Forward Kinematics for a 2D kinematic chain can be figured out using some trigonometry stuff although in order to generalise to a 3D space
 we can also use the denavit hartenberg matrices in order to solve the FK problem (although this is decidedly harder)
 
@@ -126,7 +130,7 @@ class ForwardKinematics{
   //TODO: This method returns a PVector which is the position of the end of our chain. We have to use the angle information as well as the length of each
   //arm to find out where the end of our chain is in space. There is also some prerequisite understanding of trigonometry that is assumed.
   
-  //This method is pretty short, so don't overthink it.
+  //This method is also pretty short, so don't overthink it.
   public PVector APPLY_FK(){
     float angSum = this.angles.get(0);
     PVector ret = new PVector(seed_position.x,seed_position.y);
@@ -188,7 +192,6 @@ class InverseKinematics extends ForwardKinematics{
 
 void setup(){
   size(1400,900);
-  matPipeline = new MatrixOps();
   //In order to get a sample of points to try out, we'll just make a circle of points around our arm.
   int RAD = 300;
   for(float f = 0; f <= 2*PI; f+= 0.1){
