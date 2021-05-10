@@ -19,8 +19,7 @@ attempt to move closer and closer to the goal state
 If you are familiar with machine learning, the forward and inverse kinematics processes can be thought of similar to the feedforward and backpropagation procedures in a 
 neural network, since we can theoretically optimize a chain with any amount of arms in it.
 
-The main issues that are prevalent with CCD is that it tends to make the arm move in unreasonable ways, and in some cases can lead to NaN in some values
-due to weird numerical errors (although I think this can be resolved easily).
+The main issues that are prevalent with CCD is that it tends to make the arm move in unreasonable ways, but it is usually pretty fast.
 
 
 */
@@ -166,7 +165,8 @@ class InverseKinematics extends ForwardKinematics{
     super(kinematic_chain,seed_position,angles,arm_lengths);
     this.end_effector_position = this.APPLY_FK();
   }
-  
+  //this method is important to use in cyclic_coordinate_descent(), since it will convert the angle provided into one that
+  //can be passed into arccos() and arcsin() (since the domain of arccos() and arcsin() are [-pi, pi] )
   public double angleReduction(double angle){
     angle = angle % (2.0 * PI);
     if( angle < PI )
