@@ -49,7 +49,7 @@ and we do this after each call of cyclic_coordinate_descent() as well
 InverseKinematics IK; //this will be our main InverseKinematics object to hold info about our kinematic chain.
 
 ArrayList<ArmParameters> armStateMachine = new ArrayList<ArmParameters>();
-int IK_PTR = 1;
+int IK_PTR = 550;
 //these will be the parameters for one 2D kinematic chain (we can add more later and generalise this)
 PVector cur = new PVector(350,350);
 ArrayList<ArmSegment> robotArm = new ArrayList<ArmSegment>();
@@ -167,6 +167,15 @@ class InverseKinematics extends ForwardKinematics{
     this.end_effector_position = this.APPLY_FK();
   }
   
+  public double angleReduction(double angle){
+    angle = angle % (2.0 * PI);
+    if( angle < PI )
+        angle += (2.0 * PI);
+    else if( angle > PI )
+        angle -= (2.0 * PI);
+    return angle;
+  }
+  
   //TODO: this method will run iteratively in draw(), but we will have the method return TRUE if a solution has been found, and FALSE otherwise.
   //It takes the parameter of some position in 2D space (for the moment, we will assume that the arm will always be able to reach desired_position, so we don't get weird cases)
   public boolean cyclic_coordinate_descent(PVector desired_position){
@@ -194,20 +203,22 @@ void setup(){
   size(1400,900);
   //In order to get a sample of points to try out, we'll just make a circle of points around our arm.
   int RAD = 300;
-  for(float f = 0; f <= 2*PI; f+= 0.1){
-    target_points.add(new PVector(350 + (RAD*cos(f)),350 + (RAD*sin(f)) ) );
+  for(float f = 0; f <= 2*PI; f+= 0.01){
+    target_points.add(new PVector(cur.x + (RAD*cos(f)),cur.y + (RAD*sin(f)) ) );
   }
-  armStateMachine.add(new ArmParameters(cur,new ArrayList<ArmSegment>(),new ArrayList<Float>(), new ArrayList<Float>(), target_point));
-  GENERATE_CUSTOM_ARM(6);//will modify this to generate "better" kinematic chains
+  armStateMachine.add(new ArmParameters(cur,new ArrayList<ArmSegment>(),new ArrayList<Float>(), new ArrayList<Float>(), target_points.get(0)));
+  GENERATE_CUSTOM_ARM(7);//will modify this to generate "better" kinematic chains
   IK = new InverseKinematics(robotArm, cur, angles, arm_lengths);
+  for(int i = 0; i < target_points.size(); i++){
+  }
 }
 
 void draw(){
-  //Now, we actually run all of the code we have written.
+  //Now, we run the code we have written.
   background(0);
+  //delay(1000);
   DRAW_ROBOT_ARM(IK);
   println("KINEMATIC CHAIN ANGLES: ");
-  //some debugging information (notice some of the values here, it can be interesting in some cases)
   for(Float f : IK.angles){
     print(f + " ");
   }
@@ -218,6 +229,11 @@ void draw(){
   fill(0,255,0);
   for(PVector p : target_points){noStroke(); fill(0,255,0); ellipse(p.x, p.y, 8, 8);}
   
-  PVector target_point = target_points.get(10);
-  IK.cyclic_coordinate_descent(target_point);
+  PVector target_point = target_points.get(IK_PTR);
+  fill(125,125,255);
+  ellipse(target_point.x, target_point.y, 8,8);
+  fill(0,255,0);
+  if(IK.cyclic_coordinate_descent(target_point).size() > 0){
+    IK_PTR = (IK_PTR + 1)%(target_points.size());
+  }
 }
