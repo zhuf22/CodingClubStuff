@@ -7,7 +7,7 @@ void draw(){
   stroke(255);
   
   rotAngle = (mouseX - width/2)/100.0;
-  scale = (float) mouseY/height;
+  scale = constrain((float) mouseY/height, 0.01,1);
   
   
   translate(width/2, height);
