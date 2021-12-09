@@ -3,7 +3,7 @@ void setup(){
 }
 float initLen = 200;
 void draw(){
-  background(150);
+  background(0);
   stroke(255);
   
   rotAngle = (mouseX - width/2)/100.0;
@@ -28,7 +28,7 @@ void branch(float len){
   pop();
   
   push();
-  rotate(-rotAngle);
+  rotate(-rotAngle*.2);
   branch(len * scale);
   pop();
 }
