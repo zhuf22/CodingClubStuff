@@ -10,8 +10,8 @@ class Particle{
   void walk(){
     pos.x -= 1;
     //pos.y += noise(frameCount) * (random(1)>0.5?-1:1);
-    //pos.y += random(-2,2);
-    pos.y += (random(1) > 0.5?-1:1);
+    pos.y += random(-1,1);
+    //pos.y += (random(1) > 0.5?-1:1);
     
     //constrain the position to between slice
     pos.y = constrain(pos.y, 0, pos.x*tan(PI/6));
