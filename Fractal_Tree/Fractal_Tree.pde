@@ -7,28 +7,29 @@ void draw(){
   stroke(255);
   
   rotAngle = (mouseX - width/2)/100.0;
-  scale = constrain((float) mouseY/height, 0.01,1);
+  scale = (float) mouseY/height;
   
   
   translate(width/2, height);
-  branch(initLen);
+  branch(initLen, 0);
 }
 
+int limit = 10;
 float minSize = 30;
 float rotAngle = PI/4;
 float scale = 0.667;
-void branch(float len){
-  if(len < minSize) return;
+void branch(float len, int layer){
+  if(len < minSize || layer > limit) return;
   line(0, 0, 0, -len);
   translate(0, -len);
   
   push();
   rotate(rotAngle);
-  branch(len * scale);
+  branch(len * scale, layer+1);
   pop();
   
   push();
   rotate(-rotAngle*.2);
-  branch(len * scale);
+  branch(len * scale, layer+1);
   pop();
 }
