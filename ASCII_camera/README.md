@@ -1,0 +1,1 @@
+In order to run this, you will need the Processing Video library, which you can install (for macOS) through Sketch>Import Library>Add Library and installing for the "Video" library from the Processing Foundation.
